@@ -46,6 +46,7 @@ pool
   })
   .catch((err) => {
     console.error('POST an error occurred', err);
+    res.sendStatus(500);
   });
 
 /**
