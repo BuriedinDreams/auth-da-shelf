@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function ShelfPage() {
   const [shelfItems, setShelfItems] = useState([]);
+  useEffect(() => {
+    loadShelf();
+  }, []);
   const loadShelf = () => {
     // Grab shelf items from db
     axios
@@ -19,9 +22,10 @@ function ShelfPage() {
 
   const deleteBook = (bookID) => {
     axios
-      .delete(`/api/shelf${bookID}`)
+      .delete(`/api/shelf/${bookID}`)
       .then((res) => {
         console.log('successful Delete: ShelfPage', res);
+        loadShelf();
       })
       .catch((error) => {
         console.log('error on deleteBook: ShelfPage', error);
@@ -38,7 +42,7 @@ function ShelfPage() {
             {items.description}
             <button
               onClick={() => {
-                deleteBook(iBook.id);
+                deleteBook(items.id);
               }}
             >
               {' '}
