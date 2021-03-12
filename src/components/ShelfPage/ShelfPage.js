@@ -23,6 +23,7 @@ function ShelfPage() {
         console.error('error on get shelf', err);
       });
   };
+  // On submit will post the
   const onSubmit = (evt) => {
     evt.preventDefault();
 
@@ -49,6 +50,22 @@ function ShelfPage() {
         console.log('error on deleteBook: ShelfPage', error);
       });
   };
+  const editShelf = (item) => {
+    axios
+      .put(`/api/shelf`, {
+        name: itemName,
+        description: itemDescription,
+        image_url: itemUrl,
+      })
+      .then((res) => {
+        console.log(res, 'response on put client');
+        loadShelf();
+      })
+      .catch((err) => {
+        console.log('error on put client', err);
+      });
+  };
+
   return (
     <div className="container">
       <h2>Shelf</h2>
@@ -58,6 +75,7 @@ function ShelfPage() {
           <li key={items.id}>
             {' '}
             {items.description}
+            {items.image_url}
             <button
               onClick={() => {
                 deleteBook(items.id);

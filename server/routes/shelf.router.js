@@ -73,10 +73,27 @@ router.delete('/:id', (req, res) => {
 /**
  * Update an item if it's something the logged in user added
  */
-router.put('/:id', (req, res) => {
+router.put('/', (req, res) => {
   // endpoint functionality
+  const userId = req.user.id;
+  const sqlQuery = `UPDATE "item" SET "description" = $1 "image_url" = $2 "name" = $3 WHERE "user_id" = $4`;
+  pool.query(sqlQuery, [
+    req.body.description,
+    req.body.image_url,
+    req.body.name,
+    userId,
+  ]);
+  console
+    .log(req.body.description, 'description')
+    .then((dbRes) => {
+      console.log(dbRes, 'dbRes');
+      res.sendStatus(200);
+    })
+    .catch((err) => {
+      console.log('error on put', err);
+      res.sendStatus(500);
+    });
 });
-
 /**
  * Return all users along with the total number of items
  * they have added to the shelf
