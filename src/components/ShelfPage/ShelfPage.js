@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function ShelfPage() {
   const [shelfItems, setShelfItems] = useState([]);
+  const [itemName, setItemName] = useState('');
+  const [itemDescription, setItemDescription] = useState('');
+  const [itemUrl, setItemUrl] = useState('');
+
   useEffect(() => {
     loadShelf();
   }, []);
@@ -19,7 +23,21 @@ function ShelfPage() {
         console.error('error on get shelf', err);
       });
   };
+  const onSubmit = (evt) => {
+    evt.preventDefault();
 
+    axios
+      .post('/api/shelf', {
+        name: itemName,
+        description: itemDescription,
+        image_url: itemUrl,
+      })
+      .then((res) => {
+        console.log(res);
+        loadShelf();
+      })
+      .catch((err) => console.error(err));
+  };
   const deleteBook = (bookID) => {
     axios
       .delete(`/api/shelf/${bookID}`)
@@ -51,6 +69,26 @@ function ShelfPage() {
           </li>
         ))}
       </ul>
+      <form onSubmit={onSubmit}>
+        {' '}
+        Add a new item
+        <input
+          value={itemName}
+          placeholder="name"
+          onChange={(evt) => setItemName(evt.target.value)}
+        />
+        <input
+          value={itemDescription}
+          placeholder="description"
+          onChange={(evt) => setItemDescription(evt.target.value)}
+        />{' '}
+        <input
+          value={itemUrl}
+          placeholder="URL"
+          onChange={(evt) => setItemUrl(evt.target.value)}
+        />
+        <button>Add Item!!</button>
+      </form>
     </div>
   );
 }
